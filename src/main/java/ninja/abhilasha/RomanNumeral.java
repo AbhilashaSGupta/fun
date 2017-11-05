@@ -10,8 +10,7 @@ import java.util.Scanner;
 import static java.util.Collections.nCopies;
 
 public class RomanNumeral {
-    static Map<String, Integer> cachedValue = initializeCache();
-
+    private static Map<String, Integer> cachedValue = initializeCache();
 
     public static void main(String[] args) throws InvalidParamException {
 
@@ -29,6 +28,22 @@ public class RomanNumeral {
         System.out.println(toInteger(input));
 
 
+    }
+
+    protected static String toRomanNumeral(Integer input) {
+        return String.join("", nCopies(input, "I"))
+                     .replace("IIIII", "V")
+                     .replace("IIII", "IV")
+                     .replace("VV", "X")
+                     .replace("VIV", "IX")
+                     .replace("XXXXX", "L")
+                     .replace("XXXX", "XL")
+                     .replace("LL", "C")
+                     .replace("LXL", "XC")
+                     .replace("CCCCC", "D")
+                     .replace("CCCC", "CD")
+                     .replace("DD", "M")
+                     .replace("DCD", "CM");
     }
 
     protected static Integer toInteger(final String input) throws InvalidParamException {
@@ -72,22 +87,6 @@ public class RomanNumeral {
 
     }
 
-    protected static String toRomanNumeral(Integer input) {
-        return String.join("", nCopies(input, "I"))
-                     .replace("IIIII", "V")
-                     .replace("IIII", "IV")
-                     .replace("VV", "X")
-                     .replace("VIV", "IX")
-                     .replace("XXXXX", "L")
-                     .replace("XXXX", "XL")
-                     .replace("LL", "C")
-                     .replace("LXL", "XC")
-                     .replace("CCCCC", "D")
-                     .replace("CCCC", "CD")
-                     .replace("DD", "M")
-                     .replace("DCD", "CM");
-    }
-
     private static Map<String, Integer> initializeCache() {
         Map<String, Integer> cachedValue = new HashMap<>();
         cachedValue.put("M", 1000);
@@ -106,5 +105,6 @@ public class RomanNumeral {
 
         return cachedValue;
     }
+
 
 }
