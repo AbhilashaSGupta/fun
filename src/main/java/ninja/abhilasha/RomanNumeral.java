@@ -26,14 +26,49 @@ public class RomanNumeral {
             return;
         }
 
+        System.out.println(toInteger(input));
+
+
+    }
+
+    protected static Integer toInteger(final String input) throws InvalidParamException {
         boolean valid = input.matches("^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$");
 
         if (!valid) {
             throw new InvalidParamException("Not a valid roman numeral", input);
         }
+        return toIntegerCast(input);
+    }
 
-        System.out.println(toInteger(input));
 
+    private static int toIntegerCast(String input) throws InvalidParamException {
+        if (StringUtils.isEmpty(input)) {
+            return 0;
+        }
+
+        if (input.length() == 1) {
+            if (cachedValue.containsKey(input)) {
+                return cachedValue.get(input);
+            }
+            else {
+                throw new InvalidParamException("Cannot convert to integer", input);
+            }
+        }
+
+        String twoDigitPossibility = input.substring(0, 2);
+        if (cachedValue.containsKey(twoDigitPossibility)) {
+            return cachedValue.get(twoDigitPossibility) + toIntegerCast(input.substring(2, input.length()));
+        }
+        else {
+            String oneDigitPossibility = input.substring(0, 1);
+
+            if (cachedValue.containsKey(oneDigitPossibility)) {
+                return cachedValue.get(oneDigitPossibility) + toIntegerCast(input.substring(1, input.length()));
+            }
+            else {
+                throw new InvalidParamException("Cannot convert to integer", input);
+            }
+        }
 
     }
 
@@ -52,38 +87,6 @@ public class RomanNumeral {
                      .replace("DD", "M")
                      .replace("DCD", "CM");
     }
-
-    protected static int toInteger(String input) throws InvalidParamException {
-        if (StringUtils.isEmpty(input)) {
-            return 0;
-        }
-
-        if (input.length() == 1) {
-            if (cachedValue.containsKey(input)) {
-                return cachedValue.get(input);
-            }
-            else {
-                throw new InvalidParamException("Cannot convert to integer", input);
-            }
-        }
-
-        String twoDigitPossibility = input.substring(0, 2);
-        if (cachedValue.containsKey(twoDigitPossibility)) {
-            return cachedValue.get(twoDigitPossibility) + toInteger(input.substring(2, input.length()));
-        }
-        else {
-            String oneDigitPossibility = input.substring(0, 1);
-
-            if (cachedValue.containsKey(oneDigitPossibility)) {
-                return cachedValue.get(oneDigitPossibility) + toInteger(input.substring(1, input.length()));
-            }
-            else {
-                throw new InvalidParamException("Cannot convert to integer", input);
-            }
-        }
-
-    }
-
 
     private static Map<String, Integer> initializeCache() {
         Map<String, Integer> cachedValue = new HashMap<>();
